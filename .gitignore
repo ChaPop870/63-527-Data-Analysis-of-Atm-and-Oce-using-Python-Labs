@@ -173,7 +173,7 @@ cython_debug/
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-#.idea/
+.idea/
 
 # Abstra
 # Abstra is an AI-powered process automation framework.
@@ -205,3 +205,25 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/.idea/
+
+
+# Data files.
+.nc
+.csv
+.dat
+/kdvt.dat
+/kdvsol.dat
+
+/Lab-Report-2/1990s.tar.gz
+/Lab-Report-2/2000monthly-meant.nc
+/Lab-Report-2/2000monthly-surft-prec.nc
+/elnino-80-98.csv
+/Lab-Report-1/kdvsol.dat
+/kdvsol.dat
+/Lab-Report-1/kdvt.dat
+/Lab-Report-1/kdvx.dat
+/kdvx.dat
+/Lab-Report-2/may2000-surf.nc
+/Lab-Report-2/May2000-uvt.nc
+/Lab-Report-2/mjonino-80-89.nc
+/Lab-Report-2/olr.2xdaily.1979-2022.nc
