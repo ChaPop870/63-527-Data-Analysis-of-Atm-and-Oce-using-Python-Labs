@@ -4,9 +4,11 @@ import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 import xarray as xr
 
+
 path = Path('2000monthly-surft-prec.nc')
 
 ds = xr.open_dataset(path, engine='scipy')
+
 
 # Coordinates of Sauteurs, Grenada.
 lon_center, lat_center = 298.3, 12.3
@@ -14,56 +16,53 @@ lon = ds['longitude'].sel(longitude=lon_center, method='nearest')
 lat = ds['latitude'].sel(latitude=lat_center, method='nearest')
 
 # Create 25 x 25 degree box around city.
-longitudes: slice = slice(lon-12.5, lon+12.5)
-latitudes: slice = slice(lat+12.5, lat-12.5)
+longitudes: slice = slice(lon - 12.5, lon + 12.5)
+latitudes: slice = slice(lat + 12.5, lat - 12.5)
+# lons, lats = np.meshgrid(lon, lat)
 
-# Select region from dataset.
-tmax = ds['t2m'].sel(latitude=latitudes, longitude=longitudes).max(dim='time') - 273.15
-tmin = ds['t2m'].sel(latitude=latitudes, longitude=longitudes).min(dim='time') - 273.15
-tvar = tmax - tmin
+rain = ds['lsp'].sel(latitude=latitudes, longitude=longitudes) * 1000
+temps = ds['t2m'].sel(latitude=latitudes, longitude=longitudes)
 
-pmax = ds['lsp'].sel(latitude=latitudes, longitude=longitudes).max(dim='time') * 1000
-pmin = ds['lsp'].sel(latitude=latitudes, longitude=longitudes).min(dim='time') * 1000
-pvar = pmax - pmin
+rain_var = rain.max(dim='time') - rain.min(dim='time')
+temps_var = temps.max(dim='time') - temps.min(dim='time')
 
-x = tvar['longitude']
-y = tvar['latitude']
+year = rain.time.dt.year.values[0]
+titles = [f"Annual Precipitation Variation in {year}", f"Annual Temperature Variation in {year}"]
 
-# Plotting.
-fig, (ax1, ax2) = plt.subplots(
-    1, 2,
-    figsize=(14, 6),
-    subplot_kw={'projection': ccrs.PlateCarree()}
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 10), subplot_kw={'projection': ccrs.PlateCarree()})
+
+pc_rain = ax1.pcolormesh(
+    rain['longitude'],
+    rain['latitude'],
+    rain_var,
+    cmap='GnBu',
+    transform=ccrs.PlateCarree(),
+    vmin=0,
+    vmax=8
 )
+cbar_1 = fig.colorbar(pc_rain, ax=ax1, orientation='horizontal', shrink=1, pad=0.05, extend='max')
+cbar_1.set_label("Large-Scale Precipitation Variation / mm")
 
-# Temperature range.
-temp_plot = ax1.pcolormesh(
-    x,
-    y,
-    tvar,
-    cmap='magma',
-    shading='auto',
-    transform=ccrs.PlateCarree()
+pc_temp = ax2.pcolormesh(
+    rain['longitude'],
+    rain['latitude'],
+    temps_var,
+    cmap='YlOrRd',
+    transform=ccrs.PlateCarree(),
+    vmin=0,
+    vmax=5
 )
+cbar_2 = fig.colorbar(pc_temp, ax=ax2, orientation='horizontal', shrink=1, pad=0.05, extend='max')
+cbar_2.set_label("2-meter Temperature Variation / K")
 
-ax1.coastlines()
-ax1.set_title('Temperature Range (°C)')
+for ax, title in zip([ax1, ax2], titles):
+    ax.coastlines('10m')
+    ax.set_title(title)
 
-fig.colorbar(temp_plot, ax=ax1)
+    gl = ax.gridlines(draw_labels=True, lw=0.5, ls=':', alpha=0.7)
 
-# Precip range.
-precip_plot = ax2.pcolormesh(
-    x,
-    y,
-    pvar,
-    cmap='Blues',
-    shading='auto',
-    transform=ccrs.PlateCarree()
-)
+    gl.top_labels = False
+    gl.right_labels = False
 
-ax2.coastlines()
-ax2.set_title('Precipitation Range (mm)')
-
-fig.colorbar(precip_plot, ax=ax2)
 
 plt.show()
