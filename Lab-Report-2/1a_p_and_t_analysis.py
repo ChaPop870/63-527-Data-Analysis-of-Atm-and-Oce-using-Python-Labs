@@ -71,7 +71,7 @@ ax1.set_ylabel("Temperature / °C")
 ax1.set_title(
     (
         "Region-averaged Temperature and Precipitation in 2000\n"
-        f"between longitudes:{longitudes.start.values-240} and {longitudes.stop.values-240} W and latitudes:{latitudes.stop.values} and {latitudes.start.values} E"
+        f"between longitudes:{longitudes.start.values-240} and {longitudes.stop.values-240} W and latitudes:{latitudes.stop.values} and {latitudes.start.values} N"
     )
 )
 ax1.set_xlim(ds['time'].min(), ds['time'].max())
