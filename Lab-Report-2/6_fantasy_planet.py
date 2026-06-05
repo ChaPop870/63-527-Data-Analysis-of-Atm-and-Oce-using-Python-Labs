@@ -1,6 +1,6 @@
 from datetime import datetime
+from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
 
@@ -108,5 +108,9 @@ ds = xr.Dataset(
     )
 )
 
-# ds.to_netcdf("fantasy_planet_wind_data.nc")
-ds
+
+file_name = "fantasy_planet_wind_data.nc"
+file_path = Path(file_name)
+ds.to_netcdf(file_path)
+
+print(f"Fantasy planet wind and energy dataset saved to {file_path.resolve()}")
