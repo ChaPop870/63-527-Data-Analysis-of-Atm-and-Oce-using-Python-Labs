@@ -33,5 +33,8 @@ ax2.plot(ds.time, prec, color='blue', label='Large-scale precipitation')
 ax2.set_ylabel("Large-scale Precipitation / mm")
 ax2.set_xlabel("Time")
 
+for ax in [ax1, ax2]:
+    ax.set_xlim(ds.time.min(), ds.time.max())
+
 
 plt.show()
