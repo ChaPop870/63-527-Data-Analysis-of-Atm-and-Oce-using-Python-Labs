@@ -14,6 +14,6 @@ ds = xr.open_mfdataset(files, engine='scipy')
 # Save the combined dataset.
 file_name = "1990-2000monthly-surft-prec_.nc"
 file_path = Path(file_name)
-# ds.to_netcdf(file_path)
+ds.to_netcdf(file_path)
 
 print(f"Merged dataset saved to: {file_path.resolve()}.")
