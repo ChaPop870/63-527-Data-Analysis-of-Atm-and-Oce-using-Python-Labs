@@ -46,7 +46,7 @@ ds2["wspeed"].attrs = {
 }
 print(f"wspeed variable and attributes added to {path2}.")
 
-output_filename = "May2000-uvt-wspeed.nc"
+output_filename = "May2000-uvt-wspeed1.nc"
 output_path = Path(output_filename)
 ds2.to_netcdf("output_path")
 print(f"Created NetCDF file at: {output_path.resolve()}")
